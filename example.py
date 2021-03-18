@@ -1,3 +1,5 @@
+#This is an example to help to understand how the metamaterial effective parameters can be obtained
+
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
