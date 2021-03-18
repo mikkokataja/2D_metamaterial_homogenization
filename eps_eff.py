@@ -1,3 +1,7 @@
+# These functions implement the metamaterial effective parameter retrieval procedure from
+# Igor Tsukerman, "Effective parameters of metamaterials: a rigorous homogenization theory via Whitney interpolation,
+# " J. Opt. Soc. Am. B 28, 577-586 (2011)
+# This implementation deviates from the article and is for 2D materials
 import numpy as np
 
 def calculate_eps_eff(omegas,bandstructure,Efields,Bfields,Hfields,Dfields):
@@ -33,7 +37,7 @@ def wnbk_interpolant(Efield, Bfield, Hfield, Dfield):
     Haverage = np.zeros_like(Hfield)
     Daverage = np.zeros_like(Dfield)
 
-    # Curl conforming fields
+    # Curl conforming fields. The implementation is 2D, hence w1-w4 have the factor of 2 to account for the 2 edges
 
     w1 = 2 * np.matmul(np.ones((resolution, 1)), np.reshape(np.linspace(1, 0, resolution), (1, resolution)))
     w2 = 2 * np.matmul(np.ones((resolution, 1)), np.reshape(np.linspace(0, 1, resolution), (1, resolution)))
@@ -58,6 +62,7 @@ def wnbk_interpolant(Efield, Bfield, Hfield, Dfield):
     Haverage[:, :, 2] = w9 * Hfield[1, 1, 2] + w10 * Hfield[-1, 1, 2] + w11 * Hfield[1, -1, 2] + w12 * Hfield[-1, -1, 2]
 
     # Div conforming fields
+    # As the material is 2D, z-face of the unit cell is just simply averaged without interpolation
 
     v1 = np.matmul(np.reshape(np.linspace(1, 0, resolution), (resolution, 1)), np.ones((1, resolution)))
     v2 = np.matmul(np.reshape(np.linspace(0, 1, resolution), (resolution, 1)), np.ones((1, resolution)))
